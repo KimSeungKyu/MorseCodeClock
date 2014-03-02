@@ -1,0 +1,25 @@
+{
+    "versionLabel": "0.1",
+    "uuid": "42e4d3a0-aab2-46bf-92b2-006cf2e7745a",
+    "appKeys": {},
+    "longName": "Morse Code Clock",
+    "versionCode": 1,
+    "capabilities": [
+        "location"
+    ],
+    "shortName": "MorseClock",
+    "companyName": "NISS",
+    "watchapp": {
+        "watchface": true
+    },
+    "resources": {
+        "media": [
+            {
+                "menuIcon": true,
+                "type": "png",
+                "name": "menu_icon",
+                "file": "images/menuicon.png"
+            }
+        ]
+    }
+}
