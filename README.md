@@ -1,3 +1,3 @@
 MorseCodeClock
 ==============
-Coming soon...
+version 0.1 출시
