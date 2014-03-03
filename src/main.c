@@ -54,7 +54,7 @@ static void handle_minute_tick(struct tm* tick_time, TimeUnits units_changed){
 
    static char time_text[] = "00:00";
 
-  strftime(time_text, sizeof(time_text), "%T", tick_time);
+  strftime(time_text, strlen(time_text), "%T", tick_time);
   text_layer_set_text(Time_layer, time_text);
 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "minute .... %s", time_text);
@@ -64,11 +64,11 @@ static void handle_minute_tick(struct tm* tick_time, TimeUnits units_changed){
 static void handle_hour_tick(struct tm* tick_time, TimeUnits units_changed){
 
   static char time_text[] = "00:00";
-  strftime(time_text, sizeof(time_text), "%T", tick_time);
+  strftime(time_text, strlen(time_text), "%T", tick_time);
   text_layer_set_text(Time_layer, time_text);
 
   static char morse_number[] = "00";
-  strftime(morse_number, sizeof(morse_number), "%T", tick_time);
+  strftime(morse_number, strlen(morse_number), "%T", tick_time);
 
   int h = myAtol(morse_number);
   VibePattern pat = {
@@ -90,7 +90,7 @@ static void handle_tick(struct tm* tick_time, TimeUnits units_changed){
 
 void handle_init(void) {
 	  my_window = window_create();
-
+    window_set_background_color(my_window, GColorBlack);
 	  Time_layer = text_layer_create(GRect(0, 168-40, 144, 40));
     text_layer_set_font(Time_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     text_layer_set_text_color(Time_layer, GColorWhite);
