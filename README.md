@@ -4,4 +4,18 @@ MorseCodeClock
 매 정시마다 모스 부호를 진동으로 알려줍니다.<br>
 Morse Code per hour.
 
-<a href="https://github.com/KimSeungKyu/MorseCodeClock/blob/master/morse_clock_watchface.pbw">Download</a>
+[Download](https://github.com/KimSeungKyu/MorseCodeClock/blob/master/morse_clock_watchface.pbw)
+
+Version
+------------
+- v0.1
+  - 초기버전
+- v0.2
+  - Z축으로 흔들어서 진동되게 할 수 있다.
+
+To do list
+------------
+- [ ] 분까지 모스부호로 표현
+- [ ] 조합형 모스부호
+- [ ] 베터리 표시
+- [ ] 블루투스 표시
