@@ -3,7 +3,7 @@
 Window *my_window;
 TextLayer *Time_layer, *Title_layer;
 
-static const uint32_t const morse_time[24][20] = {
+static const uint32_t morse_time[24][20] = {
     { 300, 100, 300, 100, 300, 100, 300, 100, 300, 300 },  //0
     { 100, 100, 300, 100, 300, 100, 300, 100, 300, 300 },  //1
     { 100, 100, 100, 100, 300, 100, 300, 100, 300, 300 },  //2
@@ -37,7 +37,7 @@ static int myAtol(const char *s) {
     const char *p = s, *q;
     long n = 0;
     int sign = 1, k = 1;
-  
+
     if (p != NULL) {
         if (*p != '\0') {
             if ((*p == '+') || (*p == '-')) {
@@ -51,36 +51,36 @@ static int myAtol(const char *s) {
 }
 
 static void handle_minute_tick(struct tm* tick_time, TimeUnits units_changed){
-  
+
    static char time_text[] = "00:00";
 
   strftime(time_text, sizeof(time_text), "%T", tick_time);
   text_layer_set_text(Time_layer, time_text);
-  
+
   APP_LOG(APP_LOG_LEVEL_DEBUG, "minute .... %s", time_text);
 }
 
 // Viberate per hour
 static void handle_hour_tick(struct tm* tick_time, TimeUnits units_changed){
-  
+
   static char time_text[] = "00:00";
   strftime(time_text, sizeof(time_text), "%T", tick_time);
   text_layer_set_text(Time_layer, time_text);
-  
-  static char morse_number[] = "00"; 
+
+  static char morse_number[] = "00";
   strftime(morse_number, sizeof(morse_number), "%T", tick_time);
-  
+
   int h = myAtol(morse_number);
   VibePattern pat = {
-    .durations = morse_time[h], 
+    .durations = morse_time[h],
     .num_segments = ARRAY_LENGTH(morse_time[h])
   };
   vibes_enqueue_custom_pattern(pat);
-  
+
   APP_LOG(APP_LOG_LEVEL_DEBUG, "hour .... %d", h);
 }
 
-static void handle_tick(struct tm* tick_time, TimeUnits units_changed){  
+static void handle_tick(struct tm* tick_time, TimeUnits units_changed){
   if(units_changed & HOUR_UNIT){
     handle_hour_tick(tick_time, HOUR_UNIT);
   }else if(units_changed & MINUTE_UNIT){
@@ -90,20 +90,20 @@ static void handle_tick(struct tm* tick_time, TimeUnits units_changed){
 
 void handle_init(void) {
 	  my_window = window_create();
-    
+
 	  Time_layer = text_layer_create(GRect(0, 168-40, 144, 40));
     text_layer_set_font(Time_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     text_layer_set_text_color(Time_layer, GColorWhite);
     text_layer_set_background_color(Time_layer, GColorBlack);
     text_layer_set_text_alignment(Time_layer, GTextAlignmentCenter);
-    
+
     time_t now = time(NULL);
     struct tm *current_time = localtime(&now);
     handle_tick(current_time, MINUTE_UNIT);
     tick_timer_service_subscribe(HOUR_UNIT|MINUTE_UNIT, &handle_tick);
-    
+
     layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(Time_layer));
-  
+
     Title_layer = text_layer_create(GRect(0, 0, 144, 35));
     text_layer_set_font(Title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
     text_layer_set_text_color(Title_layer, GColorWhite);
@@ -111,12 +111,13 @@ void handle_init(void) {
     text_layer_set_text_alignment(Title_layer, GTextAlignmentCenter);
     text_layer_set_text(Title_layer, "Morse Code Clock");
     layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(Title_layer));
-    
+
     window_stack_push(my_window, true);
 }
 
 void handle_deinit(void) {
 	  text_layer_destroy(Time_layer);
+    text_layer_destroy(Title_layer);
 	  window_destroy(my_window);
 }
 
