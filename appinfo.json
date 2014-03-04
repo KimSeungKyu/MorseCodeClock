@@ -1,9 +1,9 @@
 {
-    "versionLabel": "0.2",
+    "versionLabel": "1.0",
     "uuid": "42e4d3a0-aab2-46bf-92b2-006cf2e7745a",
     "appKeys": {},
     "longName": "Morse Code Clock",
-    "versionCode": 2,
+    "versionCode": 3,
     "capabilities": [
         ""
     ],
