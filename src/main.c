@@ -1,5 +1,7 @@
 #include <pebble.h>
 
+#define KEY_INVERT 0
+  
 Window *my_window;
 TextLayer *Time_layer, *Morse_layer1, *Morse_layer2, *Morse_layer3, *Morse_layer4;
 
@@ -85,39 +87,111 @@ static void handle_tap(AccelAxisType axis, int32_t direction){
   APP_LOG(APP_LOG_LEVEL_DEBUG, "MCC: Shake!");
 }
 
+static void in_recv_handler(DictionaryIterator *iterator, void *context){
+  //Get Tuple
+  Tuple *t = dict_read_first(iterator);
+  if(t)
+  {
+    switch(t->key)
+    {
+    case KEY_INVERT:
+      //It's the KEY_INVERT key
+      if(strcmp(t->value->cstring, "black") == 0)
+      {
+        //Set and save as inverted
+        text_layer_set_background_color(Morse_layer1, GColorBlack);
+        text_layer_set_background_color(Morse_layer2, GColorBlack);
+        text_layer_set_background_color(Morse_layer3, GColorBlack);
+        text_layer_set_background_color(Morse_layer4, GColorBlack);
+        text_layer_set_background_color(Time_layer, GColorBlack);
+        text_layer_set_text_color(Morse_layer1, GColorWhite);
+        text_layer_set_text_color(Morse_layer2, GColorWhite);
+        text_layer_set_text_color(Morse_layer3, GColorWhite);
+        text_layer_set_text_color(Morse_layer4, GColorWhite);
+        text_layer_set_text_color(Time_layer, GColorWhite);
+        
+        persist_write_bool(KEY_INVERT, true);
+      }
+      else if(strcmp(t->value->cstring, "white") == 0)
+      {
+        //Set and save as not inverted
+        text_layer_set_background_color(Morse_layer1, GColorWhite);
+        text_layer_set_background_color(Morse_layer2, GColorWhite);
+        text_layer_set_background_color(Morse_layer3, GColorWhite);
+        text_layer_set_background_color(Morse_layer4, GColorWhite);
+        text_layer_set_background_color(Time_layer, GColorWhite);
+        text_layer_set_text_color(Morse_layer1, GColorBlack);
+        text_layer_set_text_color(Morse_layer2, GColorBlack);
+        text_layer_set_text_color(Morse_layer3, GColorBlack);
+        text_layer_set_text_color(Morse_layer4, GColorBlack);
+        text_layer_set_text_color(Time_layer, GColorBlack);
+        
+        persist_write_bool(KEY_INVERT, false);
+      }
+      break;
+    }
+  }
+}
+
 void handle_init(void) {
+  
+  // 설정을 바꾼 것을 실시간으로 반영
+  app_message_register_inbox_received((AppMessageInboxReceived) in_recv_handler);
+  app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
+  
+  bool inverted = persist_read_bool(KEY_INVERT);
+  
   my_window = window_create();
 
   Morse_layer1 = text_layer_create(GRect(0, 0, 144, 140));
   text_layer_set_font(Morse_layer1, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   text_layer_set_text_alignment(Morse_layer1, GTextAlignmentCenter);
-  text_layer_set_background_color(Morse_layer1, GColorClear);
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(Morse_layer1));
   
   Morse_layer2 = text_layer_create(GRect(0, 30, 144, 140));
   text_layer_set_font(Morse_layer2, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   text_layer_set_text_alignment(Morse_layer2, GTextAlignmentCenter);
-  text_layer_set_background_color(Morse_layer2, GColorClear);
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(Morse_layer2));
   
   Morse_layer3 = text_layer_create(GRect(0, 60, 144, 140));
   text_layer_set_font(Morse_layer3, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   text_layer_set_text_alignment(Morse_layer3, GTextAlignmentCenter);
-  text_layer_set_background_color(Morse_layer3, GColorClear);
+  
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(Morse_layer3));
   
   Morse_layer4 = text_layer_create(GRect(0, 90, 144, 140));
   text_layer_set_font(Morse_layer4, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   text_layer_set_text_alignment(Morse_layer4, GTextAlignmentCenter);
-  text_layer_set_background_color(Morse_layer4, GColorClear);
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(Morse_layer4));
 
   Time_layer = text_layer_create(GRect(0, 140, 144, 168));
   text_layer_set_font(Time_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(Time_layer, GTextAlignmentCenter);
-  text_layer_set_background_color(Time_layer, GColorBlack);
-  text_layer_set_text_color(Time_layer, GColorWhite);
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(Time_layer));
+  
+  if(inverted == false){
+    text_layer_set_background_color(Morse_layer1, GColorWhite);
+    text_layer_set_background_color(Morse_layer2, GColorWhite);
+    text_layer_set_background_color(Morse_layer3, GColorWhite);
+    text_layer_set_background_color(Morse_layer4, GColorWhite);
+    text_layer_set_background_color(Time_layer, GColorWhite);
+    text_layer_set_text_color(Morse_layer1, GColorBlack);
+    text_layer_set_text_color(Morse_layer2, GColorBlack);
+    text_layer_set_text_color(Morse_layer3, GColorBlack);
+    text_layer_set_text_color(Morse_layer4, GColorBlack);
+    text_layer_set_text_color(Time_layer, GColorBlack);
+  }else{
+    text_layer_set_background_color(Morse_layer1, GColorBlack);
+    text_layer_set_background_color(Morse_layer2, GColorBlack);
+    text_layer_set_background_color(Morse_layer3, GColorBlack);
+    text_layer_set_background_color(Morse_layer4, GColorBlack);
+    text_layer_set_background_color(Time_layer, GColorBlack);
+    text_layer_set_text_color(Morse_layer1, GColorWhite);
+    text_layer_set_text_color(Morse_layer2, GColorWhite);
+    text_layer_set_text_color(Morse_layer3, GColorWhite);
+    text_layer_set_text_color(Morse_layer4, GColorWhite);
+    text_layer_set_text_color(Time_layer, GColorWhite);
+  }
   
   time_t now = time(NULL);
   struct tm *current_time = localtime(&now);
