@@ -1,27 +1,27 @@
 {
-    "capabilities": [
-        "configurable"
-    ],
-    "companyName": "NISS",
-    "appKeys": {
-        "KEY_INVERT": 0
-    },
-    "uuid": "42e4d3a0-aab2-46bf-92b2-006cf2e7745a",
     "versionCode": 3,
     "resources": {
         "media": [
             {
-                "name": "menu_icon",
                 "menuIcon": true,
                 "type": "png",
+                "name": "menu_icon",
                 "file": "images/menuicon.png"
             }
         ]
     },
-    "longName": "Morse Code Clock",
-    "shortName": "MorseClock",
     "watchapp": {
         "watchface": true
     },
-    "versionLabel": "1.0"
+    "appKeys": {
+        "KEY_INVERT": 0
+    },
+    "shortName": "MorseClock",
+    "capabilities": [
+        "configurable"
+    ],
+    "uuid": "42e4d3a0-aab2-46bf-92b2-006cf2e7745a",
+    "versionLabel": "1.1",
+    "longName": "Morse Code Clock",
+    "companyName": "NISS"
 }

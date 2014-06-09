@@ -1,4 +1,4 @@
-var uri = "http://dl.dropboxusercontent.com/u/92292537/mcc-config.html";
+
 
 Pebble.addEventListener("ready",
   function(e) {
@@ -12,11 +12,11 @@ Pebble.addEventListener("showConfiguration",
     var options = JSON.parse(localStorage.getItem('options'));
     console.log("read options: " + JSON.stringify(options));
     console.log("showing configuration");
+    var uri = "http://dl.dropboxusercontent.com/u/92292537/mcc-config.html";
     if (options !== null) {
-        uri = uri + '?' + 'invert_select=' + encodeURIComponent(options.invert);
+        url = uri + '?' + 'invert_select=' + encodeURIComponent(options.invert);
     }
-    Pebble.openURL(uri);
-    //Pebble.openURL("https://dl.dropboxusercontent.com/u/92292537/mcc-config.html");
+    Pebble.openURL(url);
   }
 );
 
